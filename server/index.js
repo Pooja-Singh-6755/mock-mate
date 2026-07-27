@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-//test
-=======
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import connectDB from "./config/db";
+import connectDB from "./config/db.js";
 
 // Load env variables
 dotenv.config();
@@ -28,4 +25,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
->>>>>>> 01113c70506f8270e5a61c8fe53e1ad683182b93
