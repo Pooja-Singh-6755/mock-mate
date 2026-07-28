@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import dns from "dns";
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
-// Force Node to use public DNS servers to resolve Atlas SRV records
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const connectDB = async () => {
   try {
@@ -13,5 +12,4 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
 export default connectDB;
