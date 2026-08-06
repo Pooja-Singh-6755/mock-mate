@@ -1,0 +1,8 @@
+.setup-container { max-width: 480px; margin: 60px auto; padding: 24px; }
+.setup-label { display: block; font-size: 13px; color: #999; margin: 16px 0 6px; }
+.setup-input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: #14121f; color: #f6f5ff; font-size: 14px; }
+.setup-type-tabs { display: flex; gap: 8px; }
+.setup-type-tab { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: transparent; color: #ccc; cursor: pointer; font-size: 13px; }
+.setup-type-tab.active { background: linear-gradient(135deg,#8b7cf3,#6d5cd6); color: white; border-color: transparent; }
+.setup-start-btn { margin-top: 24px; width: 100%; padding: 12px; border-radius: 10px; border: none; background: linear-gradient(135deg,#8b7cf3,#6d5cd6); color: white; font-weight: 600; cursor: pointer; }
+.setup-start-btn:disabled { opacity: 0.5; cursor: not-allowed; }

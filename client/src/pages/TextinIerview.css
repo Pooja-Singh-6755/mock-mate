@@ -1,0 +1,14 @@
+.ti-container { max-width: 640px; margin: 0 auto; padding: 24px; }
+.ti-progress { font-size: 13px; color: #888; margin-bottom: 12px; }
+.ti-question-card { background: #1c1934; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.ti-topic-badge { display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #a78bfa; background: rgba(124,108,240,0.1); border: 1px solid rgba(124,108,240,0.25); border-radius: 999px; padding: 3px 10px; margin-bottom: 10px; }
+.ti-question-text { font-size: 16px; line-height: 1.5; margin: 0; }
+.ti-answer-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); background: #14121f; color: #f6f5ff; font-family: inherit; font-size: 14px; resize: vertical; }
+.ti-feedback-panel { margin-top: 14px; padding: 14px; border-radius: 10px; background: rgba(47,212,128,0.08); border: 1px solid rgba(47,212,128,0.25); font-size: 13px; }
+.ti-submit-btn { margin-top: 16px; padding: 10px 22px; border-radius: 10px; border: none; background: linear-gradient(135deg,#8b7cf3,#6d5cd6); color: white; font-weight: 600; cursor: pointer; }
+.ti-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ti-loading, .ti-error, .ti-complete { text-align: center; padding: 60px 20px; }
+.ti-overall-score { font-size: 22px; font-weight: 700; color: #34d399; }
+.ti-error-inline { color: #ff5c72; font-size: 13px; margin-top: 10px; }
+.ti-cursor { display: inline-block; animation: ti-blink 0.9s steps(1) infinite; color: #a78bfa; }
+@keyframes ti-blink { 50% { opacity: 0; } }

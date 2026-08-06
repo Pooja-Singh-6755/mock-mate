@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 
 // Weekly goal progress — replace with real data from your API/context.
