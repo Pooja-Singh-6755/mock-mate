@@ -1,8 +1,277 @@
-.setup-container { max-width: 480px; margin: 60px auto; padding: 24px; }
-.setup-label { display: block; font-size: 13px; color: #999; margin: 16px 0 6px; }
-.setup-input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: #14121f; color: #f6f5ff; font-size: 14px; }
-.setup-type-tabs { display: flex; gap: 8px; }
-.setup-type-tab { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: transparent; color: #ccc; cursor: pointer; font-size: 13px; }
-.setup-type-tab.active { background: linear-gradient(135deg,#8b7cf3,#6d5cd6); color: white; border-color: transparent; }
-.setup-start-btn { margin-top: 24px; width: 100%; padding: 12px; border-radius: 10px; border: none; background: linear-gradient(135deg,#8b7cf3,#6d5cd6); color: white; font-weight: 600; cursor: pointer; }
-.setup-start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.setup-container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 14px 20px;
+  background: #0b0a12;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #f3f2fa;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Left-aligned content column, not centered */
+.setup-container > * {
+  max-width: 760px;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.setup-eyebrow {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #8b7cf3;
+  margin: 0 0 4px;
+  text-align: left;
+}
+
+.setup-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #ffffff;
+  text-align: left;
+  letter-spacing: -0.02em;
+}
+
+.setup-subtitle {
+  font-size: 12.5px;
+  color: #9d9cb0;
+  line-height: 1.4;
+  margin: 0 0 14px;
+  text-align: left;
+}
+
+.setup-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #d8d6ea;
+  margin: 0 0 8px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Role grid */
+.setup-role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.setup-role-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #14121f;
+  color: #e4e2f0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.setup-role-card:hover {
+  border-color: rgba(139, 124, 243, 0.4);
+  background: #171524;
+}
+
+.setup-role-card.active {
+  background: rgba(139, 124, 243, 0.12);
+  border-color: #8b7cf3;
+  color: #d3cdf7;
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(139, 124, 243, 0.3);
+}
+
+.setup-role-icon {
+  font-size: 15px;
+}
+
+/* Difficulty */
+.setup-difficulty-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.setup-difficulty-pill {
+  padding: 7px 20px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #14121f;
+  color: #e4e2f0;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.setup-difficulty-pill:hover {
+  border-color: rgba(139, 124, 243, 0.4);
+}
+
+.setup-difficulty-pill.active {
+  background: linear-gradient(135deg, #8b7cf3, #6d5cd6);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(109, 92, 214, 0.35);
+}
+
+/* Interview mode */
+.setup-mode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 12px;
+}
+
+.setup-mode-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #14121f;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+
+.setup-mode-row:hover {
+  border-color: rgba(139, 124, 243, 0.4);
+  background: #171524;
+}
+
+.setup-mode-row.active {
+  background: rgba(139, 124, 243, 0.12);
+  border-color: #8b7cf3;
+  box-shadow: 0 0 0 1px rgba(139, 124, 243, 0.3);
+}
+
+.setup-mode-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.setup-mode-text {
+  font-size: 13px;
+}
+
+.setup-mode-label {
+  font-weight: 600;
+  color: #f3f2fa;
+}
+
+.setup-mode-row.active .setup-mode-label {
+  color: #d3cdf7;
+}
+
+.setup-mode-dash,
+.setup-mode-desc {
+  color: #8a8a9a;
+  font-size: 12px;
+}
+
+.setup-hint {
+  font-size: 11.5px;
+  color: #a99cf0;
+  background: rgba(139, 124, 243, 0.08);
+  border: 1px solid rgba(139, 124, 243, 0.15);
+  padding: 8px 14px;
+  border-radius: 9px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.setup-hint strong {
+  color: #d3cdf7;
+}
+
+/* Slider */
+.setup-slider {
+  width: 100%;
+  accent-color: #8b7cf3;
+  margin-bottom: 14px;
+  display: block;
+  height: 4px;
+}
+
+/* Start button */
+.setup-start-btn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #8b7cf3, #6d5cd6);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: block;
+  box-shadow: 0 6px 20px rgba(109, 92, 214, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
+}
+
+.setup-start-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(109, 92, 214, 0.45);
+}
+
+.setup-start-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 640px) {
+  .setup-container {
+    height: 100vh;
+    padding: 12px 16px;
+    overflow-y: auto;
+  }
+
+  .setup-role-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .setup-difficulty-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .setup-mode-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+    padding: 8px 14px;
+  }
+
+  .setup-title {
+    font-size: 19px;
+  }
+}
+
+@media (max-height: 700px) {
+  .setup-container {
+    overflow-y: auto;
+  }
+}

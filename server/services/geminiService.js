@@ -1,19 +1,62 @@
 // server/src/services/geminiService.js
 import { callGemini, streamGemini } from '../config/gemini.js';
 
-// FIX: your version had "require('../../config/gemini')" — one level too deep.
-// Since this file lives at server/src/services/geminiService.js and gemini.js lives
-// at server/src/config/gemini.js, only ONE "../" is needed to reach src/, then into config/.
 
-// Rotating topic pool — decided by US (not by Gemini), based on question order.
-// Keeps things varied across the interview instead of asking the same topic every time.
-const TOPIC_POOL = [
-  'JavaScript Fundamentals', 'React', 'Node.js', 'Express.js',
-  'MongoDB', 'REST APIs', 'Authentication & Security', 'System Design',
-];
+const ROLE_TOPIC_POOLS = {
+  frontend: [
+    'JavaScript Fundamentals',
+    'React',
+    'CSS & Responsive Design',
+    'State Management',
+    'Browser APIs & DOM',
+    'Performance & Accessibility',
+    'Frontend Testing',
+    'Frontend Architecture',
+  ],
+  backend: [
+    'Node.js',
+    'Express.js',
+    'MongoDB',
+    'REST API Design',
+    'Authentication & Security',
+    'Database Design & Indexing',
+    'Caching & Performance',
+    'Error Handling & Middleware',
+  ],
+  'system-design': [
+    'Scalability Fundamentals',
+    'Database Design',
+    'Caching Strategies',
+    'Load Balancing',
+    'Microservices vs Monolith',
+    'API Design',
+    'Message Queues',
+    'CAP Theorem & Trade-offs',
+  ],
+  mern: [
+    'JavaScript Fundamentals',
+    'React',
+    'Node.js',
+    'Express.js',
+    'MongoDB',
+    'REST APIs',
+    'Authentication & Security',
+    'System Design',
+  ],
+};
 
-function pickTopic(order) {
-  return TOPIC_POOL[(order - 1) % TOPIC_POOL.length];
+
+function normalizeRoleKey(role = '') {
+  const r = role.toLowerCase();
+  if (r.includes('frontend')) return 'frontend';
+  if (r.includes('backend')) return 'backend';
+  if (r.includes('system design') || r.includes('system-design')) return 'system-design';
+  return 'mern';
+}
+
+function pickTopic(role, order) {
+  const pool = ROLE_TOPIC_POOLS[normalizeRoleKey(role)] || ROLE_TOPIC_POOLS.mern;
+  return pool[(order - 1) % pool.length];
 }
 
 function safeParseJSON(raw) {
@@ -30,11 +73,8 @@ function safeParseJSON(raw) {
  * socket flow uses streamGenerateQuestion below instead).
  */
 export async function generateQuestion({ role, difficulty, previousQuestions = [], topic }) {
-  // FIX: was "topics && topics.trim()" (undefined var "topics") and "${roles}" typo.
   const activeTopic = topic && topic.trim() !== '' ? topic : `${role} core concepts`;
 
-  // FIX: was using "previousQuestion" (param name) to check .length but then
-  // referencing "previousQuestions" (different name) inside the template — ReferenceError.
   const avoidList = previousQuestions.length
     ? `Do NOT repeat or closely rephrase any of these already-asked questions:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}`
     : 'This is the first question of the interview.';
@@ -45,7 +85,7 @@ Role: "${role}"
 Target Focus Topic: "${activeTopic}"
 Difficulty Level: "${difficulty}"
 
-Generate ONE technical interview question strictly about "${activeTopic}".
+Generate ONE technical interview question strictly about "${activeTopic}", relevant to the "${role}" role.
 
 ${avoidList}
 
@@ -60,8 +100,6 @@ Return ONLY valid JSON, no markdown, no explanation, in this exact shape:
     throw new Error('Gemini response missing required question text.');
   }
 
-  // FIX: was returning "activeTopics" (shorthand of a var that didn't exist) instead
-  // of "topic: activeTopic" — the Question model needs a key literally named "topic".
   return { text: parsed.text, topic: activeTopic, difficulty: parsed.difficulty || difficulty };
 }
 
@@ -102,13 +140,12 @@ export function nextDifficulty(currentDifficulty, lastScore) {
 
 /**
  * Streaming question generator — powers the live typing effect.
- * FIX: your version took "topic" as a param but the caller (interviewSocket.js)
- * only ever passes "order" — topic was always falling back to the generic
- * "${role} core concepts" every single question. Restored order-based rotation
- * (same pattern as generateQuestion) so topics actually vary across questions.
+ * FIX: now passes `role` into pickTopic() so the topic pool actually matches
+ * the selected role (Frontend / Backend / System design / MERN), instead of
+ * always rotating through the same fixed MERN-flavoured list.
  */
 export async function streamGenerateQuestion({ role, difficulty, order, previousQuestions = [], onChunk }) {
-  const activeTopic = pickTopic(order);
+  const activeTopic = pickTopic(role, order);
 
   const avoidList = previousQuestions.length
     ? `Do NOT repeat or closely rephrase any of these already-asked questions:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}`
@@ -120,7 +157,7 @@ Role: "${role}"
 Target Focus Topic: "${activeTopic}"
 Difficulty Level: "${difficulty}"
 
-Generate ONE technical interview question strictly about "${activeTopic}".
+Generate ONE technical interview question strictly about "${activeTopic}", relevant to the "${role}" role.
 
 ${avoidList}
 
