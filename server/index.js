@@ -1,8 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import http from "http"; 
 import connectDB from "./config/db.js";
 import mongoose from "mongoose";
+
+import interviewRoutes from "./routes/interviewRoutes.js"; 
+import { initSocket } from "./config/socket.js"; 
 
 // Load env variables
 dotenv.config();
@@ -48,13 +52,20 @@ app.post("/api/test", async (req, res) => {
   }
 });
 
+app.use("/api/interview", interviewRoutes);
+
 // Route
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
-app.listen(PORT, () => {
+
+const httpServer = http.createServer(app);
+initSocket(httpServer);
+
+
+httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

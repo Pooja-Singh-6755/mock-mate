@@ -1,34 +1,30 @@
-const { Server } = require('socket.io');
-const { registerInterviewSocket } = require('../sockets/interviewSocket');
+import { Server } from 'socket.io';
+import { registerInterviewSocket } from '../sockets/interviewSocket.js';
 
 let io;
 
-function initSocket(httpServer) {
-    io = new Server(httpServer ,{
-     cors: {
-        origin : process.env.CLIENT_URL || 'http://localhost:5173',
-        methods: [GET , POST],
-     },
-    })
+export function initSocket(httpServer) {
+  io = new Server(httpServer, {
+    cors: {
+      origin: process.env.CLIENT_URL || 'http://localhost:5173',
+      methods: ['GET', 'POST'],
+    },
+  });
 
-
-io.on('connection' , (socket)=>{
-    console.log(`[socket] client conenct  $[socket.client.id]`);
+  io.on('connection', (socket) => {
+    console.log(`[socket] client connected: ${socket.id}`);
 
     registerInterviewSocket(socket);
 
-    socket.on('disconnect' , ()=>{
+    socket.on('disconnect', () => {
       console.log(`[socket] client disconnected: ${socket.id}`);
     });
-});
+  });
 
-    return io;
+  return io;
 }
 
-
-function getIO() {
-    if(!io) throw new Error('Socket io not initization - call hhtps first ');
-    return io;
+export function getIO() {
+  if (!io) throw new Error('Socket.io not initialized — call initSocket(httpServer) first.');
+  return io;
 }
-
-module.exports = {initSocket , getIO };

@@ -1,4 +1,20 @@
-const { callGemini , streamGemini} = require('../../config/gemini');
+// server/src/services/geminiService.js
+import { callGemini, streamGemini } from '../config/gemini.js';
+
+// FIX: your version had "require('../../config/gemini')" — one level too deep.
+// Since this file lives at server/src/services/geminiService.js and gemini.js lives
+// at server/src/config/gemini.js, only ONE "../" is needed to reach src/, then into config/.
+
+// Rotating topic pool — decided by US (not by Gemini), based on question order.
+// Keeps things varied across the interview instead of asking the same topic every time.
+const TOPIC_POOL = [
+  'JavaScript Fundamentals', 'React', 'Node.js', 'Express.js',
+  'MongoDB', 'REST APIs', 'Authentication & Security', 'System Design',
+];
+
+function pickTopic(order) {
+  return TOPIC_POOL[(order - 1) % TOPIC_POOL.length];
+}
 
 function safeParseJSON(raw) {
   const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
@@ -9,14 +25,21 @@ function safeParseJSON(raw) {
   }
 }
 
+/**
+ * Non-streaming question generator (kept for any REST/manual use — the live
+ * socket flow uses streamGenerateQuestion below instead).
+ */
+export async function generateQuestion({ role, difficulty, previousQuestions = [], topic }) {
+  // FIX: was "topics && topics.trim()" (undefined var "topics") and "${roles}" typo.
+  const activeTopic = topic && topic.trim() !== '' ? topic : `${role} core concepts`;
 
-async function generateQuestion({role , difficulty , previousQuestion = [] , topic }) {
-    const activeTopics = topics && topics.trim() !== '' ? topic : `${roles} core concepts`
+  // FIX: was using "previousQuestion" (param name) to check .length but then
+  // referencing "previousQuestions" (different name) inside the template — ReferenceError.
+  const avoidList = previousQuestions.length
+    ? `Do NOT repeat or closely rephrase any of these already-asked questions:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}`
+    : 'This is the first question of the interview.';
 
-    const avoidList  = previousQuestion.length ? `Do NOT repeat or closely rephrase any of these already-asked questions:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}`
-    : 'this is first interview question' ;
-
- const prompt = `
+  const prompt = `
 You are an experienced technical interviewer conducting a mock interview.
 Role: "${role}"
 Target Focus Topic: "${activeTopic}"
@@ -30,17 +53,22 @@ Return ONLY valid JSON, no markdown, no explanation, in this exact shape:
 {"text": "the question text", "topic": "${activeTopic}", "difficulty": "${difficulty}"}
 `.trim();
 
-const raw = await callGemini(prompt , { temperature : 0.8 , maxOutputTokens: 300});
-const parsed =  safeParseJSON(raw);
+  const raw = await callGemini(prompt, { temperature: 0.8, maxOutputTokens: 300 });
+  const parsed = safeParseJSON(raw);
 
-if (!parsed.text) {
+  if (!parsed.text) {
     throw new Error('Gemini response missing required question text.');
   }
 
-  return { text: parsed.text , activeTopics , difficulty: parsed.difficulty || difficulty};
+  // FIX: was returning "activeTopics" (shorthand of a var that didn't exist) instead
+  // of "topic: activeTopic" — the Question model needs a key literally named "topic".
+  return { text: parsed.text, topic: activeTopic, difficulty: parsed.difficulty || difficulty };
 }
 
-async function evaluateAnswer({ questionText, answerText, role }) {
+/**
+ * Evaluates a candidate's answer — score (0-10) + written feedback.
+ */
+export async function evaluateAnswer({ questionText, answerText, role }) {
   const prompt = `
 You are grading a candidate's answer in a mock interview for the role: "${role}".
 
@@ -64,7 +92,7 @@ Return ONLY valid JSON, no markdown, no explanation, in this exact shape:
   return { score, feedback: parsed.feedback };
 }
 
-function nextDifficulty(currentDifficulty, lastScore) {
+export function nextDifficulty(currentDifficulty, lastScore) {
   const levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
   const idx = levels.indexOf(currentDifficulty);
   if (lastScore >= 8 && idx < levels.length - 1) return levels[idx + 1];
@@ -72,9 +100,15 @@ function nextDifficulty(currentDifficulty, lastScore) {
   return currentDifficulty;
 }
 
-async function streamGenerateQuestion({ role, difficulty, topic, previousQuestions = [], onChunk }) {
-  // Use user's selected topic (e.g. "React", "Backend", "Express.js")
-  const activeTopic = topic && topic.trim() !== '' ? topic : `${role} core concepts`;
+/**
+ * Streaming question generator — powers the live typing effect.
+ * FIX: your version took "topic" as a param but the caller (interviewSocket.js)
+ * only ever passes "order" — topic was always falling back to the generic
+ * "${role} core concepts" every single question. Restored order-based rotation
+ * (same pattern as generateQuestion) so topics actually vary across questions.
+ */
+export async function streamGenerateQuestion({ role, difficulty, order, previousQuestions = [], onChunk }) {
+  const activeTopic = pickTopic(order);
 
   const avoidList = previousQuestions.length
     ? `Do NOT repeat or closely rephrase any of these already-asked questions:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}`
@@ -101,5 +135,3 @@ Output ONLY the question text itself — no numbering, no quotes, no markdown, n
 
   return { text: fullText.trim(), topic: activeTopic, difficulty };
 }
-
-module.exports = { generateQuestion, evaluateAnswer, nextDifficulty, streamGenerateQuestion };
