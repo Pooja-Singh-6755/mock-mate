@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSocket } from '../hooks/useSocket';
+import InterviewLoader, { MIN_LOADER_MS } from './InterviewLoader';
 import './TextinIerview.css';
 
 export default function TextInterview(props) {
@@ -27,7 +28,8 @@ export default function TextInterview(props) {
 
   const startedAtRef = useRef(Date.now());
   const previousQuestionsRef = useRef([]);
-  
+  const loaderStartedAtRef = useRef(Date.now());
+
   // Guard ref to ensure interview:start is emitted ONLY once per mount
   const hasStartedRef = useRef(false);
 
@@ -35,8 +37,13 @@ export default function TextInterview(props) {
     if (!socket) return;
 
     const handleInterviewCreated = ({ interview: iv }) => {
-      setInterview(iv);
-      setLoading(false);
+
+      const elapsed = Date.now() - loaderStartedAtRef.current;
+      const remaining = Math.max(0, MIN_LOADER_MS - elapsed);
+      setTimeout(() => {
+        setInterview(iv);
+        setLoading(false);
+      }, remaining);
     };
 
     const handleQuestionStart = () => {
@@ -117,7 +124,11 @@ export default function TextInterview(props) {
   };
 
   if (loading) {
-    return <div className="ti-loading">Connecting…</div>;
+    return (
+      <div className="ti-loading">
+        <InterviewLoader />
+      </div>
+    );
   }
 
   if (error && !streamedText && !question) {

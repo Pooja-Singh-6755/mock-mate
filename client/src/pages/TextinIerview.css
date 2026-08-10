@@ -7,7 +7,7 @@
 .ti-feedback-panel { margin-top: 14px; padding: 14px; border-radius: 10px; background: rgba(47,212,128,0.08); border: 1px solid rgba(47,212,128,0.25); font-size: 13px; }
 .ti-submit-btn { margin-top: 16px; padding: 10px 22px; border-radius: 10px; border: none; background: linear-gradient(135deg,#8b7cf3,#6d5cd6); color: white; font-weight: 600; cursor: pointer; }
 .ti-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.ti-loading, .ti-error, .ti-complete { text-align: center; padding: 60px 20px; }
+.ti-error, .ti-complete { text-align: center; padding: 60px 20px; }
 .ti-overall-score { font-size: 22px; font-weight: 700; color: #34d399; }
 .ti-error-inline { color: #ff5c72; font-size: 13px; margin-top: 10px; }
 .ti-cursor { display: inline-block; animation: ti-blink 0.9s steps(1) infinite; color: #a78bfa; }
