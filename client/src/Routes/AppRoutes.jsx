@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Setup from "../pages/Setup";
 import TextInterview from "../pages/TextInterview";
 import VideoInterview from "../pages/VedioInterview";
+import VoiceInterview from "../pages/VoiceInterview"
 import CodingSandbox from "../pages/CodingSandbox";
 import History from "../pages/History";
 import Analytics from "../pages/Analytics";
@@ -23,6 +24,7 @@ export default function AppRoutes({ candidateId }) {
       <Route path="/interview">
         <Route index element={<Navigate to="text" />} />
         <Route path="text" element={<TextInterview />} />
+        <Route path="voice" element={<VoiceInterview/>} />
         {/* <Route path="video" element={<VideoInterview />} /> */}
         {/* <Route path="coding" element={<CodingSandbox />} /> */}
       </Route>

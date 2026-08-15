@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import { registerInterviewSocket } from '../sockets/interviewSocket.js';
+import { registerVoiceInterviewSocket } from '../sockets/voiceInterviewSocket.js'
 
 let io;
 
@@ -15,6 +16,8 @@ export function initSocket(httpServer) {
     console.log(`[socket] client connected: ${socket.id}`);
 
     registerInterviewSocket(socket);
+    registerVoiceInterviewSocket(socket);
+
 
     socket.on('disconnect', () => {
       console.log(`[socket] client disconnected: ${socket.id}`);

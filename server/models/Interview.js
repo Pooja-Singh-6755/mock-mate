@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 const interviewSchema = new mongoose.Schema(
   {
     candidateId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    type: { type: String, enum: ['text', 'audio', 'video', 'coding', 'mcq'], default: 'text' },
+    type: { type: String, enum: ['text', 'voice', 'video', 'coding', 'mcq'], default: 'text' },
     role: { type: String, required: true },
     difficultyLevel: {
       type: String,

@@ -1,0 +1,159 @@
+/* client/src/pages/VoiceInterview.css */
+.va-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 0;
+}
+
+.va-progress {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.va-question-card {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0)), var(--surface);
+}
+
+.va-topic-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.va-speaking-badge {
+  float: right;
+  font-size: 12px;
+  color: var(--accent-2);
+}
+
+.va-question-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0;
+}
+
+.va-cursor {
+  display: inline-block;
+  animation: va-blink 1s step-start infinite;
+  color: var(--accent);
+}
+
+@keyframes va-blink {
+  50% { opacity: 0; }
+}
+
+.va-mic-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.va-mic-indicator {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.va-mic-indicator.live {
+  color: var(--danger);
+  font-weight: 600;
+  animation: va-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes va-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .45; }
+}
+
+.va-mic-btn {
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.03);
+  color: var(--text-dim);
+}
+
+.va-answer-box {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 12px;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.va-answer-box:disabled {
+  opacity: .6;
+}
+
+.va-feedback-panel {
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--accent-light);
+  margin-bottom: 12px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+.va-feedback-panel strong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.va-error,
+.va-error-inline {
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.va-error {
+  max-width: 480px;
+  margin: 60px auto;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.va-loading,
+.va-complete {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.va-overall-score {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+.va-submit-btn {
+  width: 100%;
+  background: linear-gradient(180deg, var(--btn-start), var(--btn-end));
+  border: 1px solid rgba(255,255,255,.06);
+  color: #fff;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 9px;
+}
+
+.va-submit-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}

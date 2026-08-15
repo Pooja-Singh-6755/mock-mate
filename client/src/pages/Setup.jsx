@@ -4,7 +4,7 @@ import './Setup.css';
 
 const ROLES = [
   {key: 'mern' , label: 'MERN stack developer' , icon: '🧩'},
-  {key: 'frontend' , label: 'Frontend (React)' , icon: '⚛️'},
+  {key: 'frontend' , label: 'Frontend (Angular)' , icon: '⚛️'},
   {key: 'backend' , label: 'Backend (Node.js)' , icon: '🖥️'},
   {key: 'system-design' , label: 'System design' , icon: '📊'}
 ]

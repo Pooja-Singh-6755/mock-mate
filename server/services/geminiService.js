@@ -5,7 +5,7 @@ import { callGemini, streamGemini } from '../config/gemini.js';
 const ROLE_TOPIC_POOLS = {
   frontend: [
     'JavaScript Fundamentals',
-    'React',
+    'Angular',
     'CSS & Responsive Design',
     'State Management',
     'Browser APIs & DOM',
