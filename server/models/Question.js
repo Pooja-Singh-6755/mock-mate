@@ -13,6 +13,8 @@ const questionSchema = new mongoose.Schema(
     },
     order: { type: Number, required: true },
     generatedBy: { type: String, default: 'gemini' },
+    options: { type: [String], default: undefined },  
+    correctIndex: { type: Number, default: undefined }, 
   },
   { timestamps: true }
 );

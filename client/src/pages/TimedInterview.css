@@ -1,0 +1,14 @@
+.ti-timer-badge {
+  float: right;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  color: var(--danger);
+  background: rgba(255, 92, 114, 0.15);
+}
+
+.ti-timer-badge.low {
+  color: #fff;
+  background: var(--danger);
+}

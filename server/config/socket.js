@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import { registerInterviewSocket } from '../sockets/interviewSocket.js';
 import { registerVoiceInterviewSocket } from '../sockets/voiceInterviewSocket.js'
+import { registerMcqInterviewSocket } from '../sockets/mcqInterviewService.js'
 
 let io;
 
@@ -17,6 +18,7 @@ export function initSocket(httpServer) {
 
     registerInterviewSocket(socket);
     registerVoiceInterviewSocket(socket);
+    registerMcqInterviewSocket(socket);
 
 
     socket.on('disconnect', () => {

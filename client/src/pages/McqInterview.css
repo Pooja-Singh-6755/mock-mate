@@ -1,0 +1,169 @@
+/* client/src/pages/McqInterview.css */
+.mcqi-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 0;
+}
+
+.mcqi-progress {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.mcqi-question-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0)), var(--surface);
+}
+
+.mcqi-topic-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.mcqi-question-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0;
+}
+
+/* --- .mcqi-option block ported directly from the mockup's .mcq-option rules --- */
+.mcqi-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.mcqi-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: .15s ease;
+  background: var(--surface-2, var(--surface));
+}
+
+.mcqi-option:hover {
+  border-color: rgba(124, 108, 240, .4);
+}
+
+.mcqi-option.selected {
+  border-color: var(--accent-2, var(--accent));
+  background: var(--accent-light);
+}
+
+.mcqi-option.correct {
+  border-color: var(--success);
+  background: rgba(47, 212, 128, .12);
+  cursor: default;
+}
+
+.mcqi-option.incorrect {
+  border-color: var(--danger);
+  background: rgba(255, 92, 114, .1);
+  cursor: default;
+}
+
+.mcqi-letter {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.mcqi-option.selected .mcqi-letter {
+  border-color: var(--accent-2, var(--accent));
+  background: var(--accent-2, var(--accent));
+  color: #fff;
+}
+
+.mcqi-option.correct .mcqi-letter {
+  border-color: var(--success);
+  background: var(--success);
+  color: #08070f;
+}
+
+.mcqi-option.incorrect .mcqi-letter {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+}
+/* --- end ported block --- */
+
+.mcqi-feedback-panel {
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--accent-light);
+  margin-bottom: 12px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+.mcqi-feedback-panel strong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.mcqi-error,
+.mcqi-error-inline {
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.mcqi-error {
+  max-width: 480px;
+  margin: 60px auto;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.mcqi-loading,
+.mcqi-complete {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.mcqi-overall-score {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+.mcqi-submit-btn {
+  width: 100%;
+  background: linear-gradient(180deg, var(--btn-start), var(--btn-end));
+  border: 1px solid rgba(255,255,255,.06);
+  color: #fff;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 9px;
+}
+
+.mcqi-submit-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}

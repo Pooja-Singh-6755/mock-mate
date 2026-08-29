@@ -15,7 +15,7 @@ const INTERVIEW_TYPES = [
   { key: 'text', label: 'Text Interview',  desc: 'type your answers', icon: '📝', path: '/interview/text' },
   { key: 'audio', label: 'Voice Interview',  desc: 'type your answers', icon: '📝', path: '/interview/voice' },
   { key: 'timed', label: 'Timed sprint', desc: '60s per question', icon: '⚡', path: '/interview/timed'},
-  { key: 'coding', label: 'Coding Round',  desc: 'live problems, real in-browser test runner',  icon: '💻' , path: '/interview/coding' },
+  { key: 'mcq', label: 'MCQ Round', desc: '4 options, pick the correct one', icon: '✅', path: '/interview/mcq' },
 ];
 
 export default function Setup({ candidateId }) {

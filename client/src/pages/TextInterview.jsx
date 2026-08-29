@@ -5,7 +5,8 @@ import { useSocket } from '../hooks/useSocket';
 import InterviewLoader, { MIN_LOADER_MS } from './InterviewLoader';
 import './TextinIerview.css';
 
-export default function TextInterview(props) {
+
+export default function TextInterview({ timed = false, secondsPerQuestion = 60, ...props }) {
   const socket = useSocket();
   const { state } = useLocation();
 
@@ -26,18 +27,76 @@ export default function TextInterview(props) {
   const [error, setError] = useState('');
   const [questionNumber, setQuestionNumber] = useState(1);
 
+
+  const [timeLeft, setTimeLeft] = useState(secondsPerQuestion);
+
   const startedAtRef = useRef(Date.now());
   const previousQuestionsRef = useRef([]);
   const loaderStartedAtRef = useRef(Date.now());
-
-  // Guard ref to ensure interview:start is emitted ONLY once per mount
   const hasStartedRef = useRef(false);
+
+  // TIMED SPRINT: ref mirror of answerText so the setInterval callback
+  // (which closes over stale state otherwise) can read the latest value.
+  const answerTextRef = useRef('');
+  const timerIntervalRef = useRef(null);
+
+  useEffect(() => {
+    answerTextRef.current = answerText;
+  }, [answerText]);
+
+  // TIMED SPRINT: start/stop/timeout helpers — no-ops entirely when timed is false.
+  const stopTimer = () => {
+    clearInterval(timerIntervalRef.current);
+  };
+
+  const startTimer = () => {
+    if (!timed) return;
+    stopTimer();
+    setTimeLeft(secondsPerQuestion);
+    timerIntervalRef.current = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          clearInterval(timerIntervalRef.current);
+          handleTimeUp();
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+  };
+
+  const handleTimeUp = () => {
+    // Whatever the candidate had typed gets submitted as-is; if they typed
+    // nothing, we still submit a placeholder so the server's non-empty
+    // check passes and the question is scored (low) instead of stuck.
+    const finalAnswer = answerTextRef.current.trim() || '(No answer — time ran out)';
+    submitAnswer(finalAnswer);
+  };
+
+  // Existing submit logic factored out so both the button AND the timeout
+  // can call it — this is the only structural change to the submit flow.
+  const submitAnswer = (text) => {
+    if (submitting) return;
+    stopTimer();
+    setSubmitting(true);
+    setError('');
+
+    const timeTakenSec = Math.round((Date.now() - startedAtRef.current) / 1000);
+
+    socket.emit('interview:submit-answer', {
+      interviewId: interview._id,
+      questionId: question._id,
+      answerText: text,
+      timeTakenSec,
+    });
+
+    setAnswerText('');
+  };
 
   useEffect(() => {
     if (!socket) return;
 
     const handleInterviewCreated = ({ interview: iv }) => {
-
       const elapsed = Date.now() - loaderStartedAtRef.current;
       const remaining = Math.max(0, MIN_LOADER_MS - elapsed);
       setTimeout(() => {
@@ -50,6 +109,7 @@ export default function TextInterview(props) {
       setStreamedText('');
       setQuestion(null);
       setStreaming(true);
+      stopTimer(); // TIMED SPRINT: no countdown while the next question streams in
     };
 
     const handleQuestionChunk = ({ chunk }) => {
@@ -61,6 +121,7 @@ export default function TextInterview(props) {
       setStreaming(false);
       previousQuestionsRef.current = [...previousQuestionsRef.current, q.text];
       startedAtRef.current = Date.now();
+      startTimer(); // TIMED SPRINT: countdown begins once the question is fully shown
     };
 
     const handleError = ({ message }) => {
@@ -103,24 +164,14 @@ export default function TextInterview(props) {
       socket.off('interview:question-complete', handleQuestionComplete);
       socket.off('interview:error', handleError);
       socket.off('interview:answer-evaluated', handleAnswerEvaluated);
+      stopTimer(); // TIMED SPRINT: clear interval on unmount
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, candidateId, role, totalQuestions]);
 
   const handleSubmit = () => {
     if (!answerText.trim() || submitting) return;
-    setSubmitting(true);
-    setError('');
-
-    const timeTakenSec = Math.round((Date.now() - startedAtRef.current) / 1000);
-
-    socket.emit('interview:submit-answer', {
-      interviewId: interview._id,
-      questionId: question._id,
-      answerText,
-      timeTakenSec,
-    });
-
-    setAnswerText('');
+    submitAnswer(answerText);
   };
 
   if (loading) {
@@ -150,6 +201,11 @@ export default function TextInterview(props) {
       <div className="ti-progress">
         Question {questionNumber} of {totalQuestions}
         {question?.difficulty ? ` · ${question.difficulty}` : ''}
+        {timed && !streaming && (
+          <span className={`ti-timer-badge ${timeLeft <= 10 ? 'low' : ''}`}>
+            ⏱ {timeLeft}s
+          </span>
+        )}
       </div>
 
       <div className="ti-question-card">

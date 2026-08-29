@@ -1,0 +1,482 @@
+/* client/src/pages/VideoInterview.css */
+.vidi-container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 0;
+}
+
+.vidi-eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text-muted);
+  margin: 0 0 4px;
+}
+
+.vidi-title {
+  margin: 0 0 6px;
+}
+
+.vidi-sub {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.vidi-status-bar {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  background: var(--surface);
+}
+
+.vidi-rec-badge {
+  background: rgba(255, 92, 114, .15);
+  color: var(--danger);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.vidi-idle-label {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.vidi-status-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.vidi-badge {
+  background: var(--surface-2, var(--surface));
+  color: var(--text-dim);
+  font-size: 11.5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.vidi-badge b {
+  margin-left: 4px;
+  color: var(--text);
+}
+
+.vidi-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 640px) {
+  .vidi-row2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vidi-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.vidi-panel-header {
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.vidi-speaking-label {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.vidi-mic-badge {
+  color: var(--success);
+}
+
+/* ---- ported directly from the mockup's interviewer-* rules ---- */
+.interviewer-frame {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(120% 85% at 50% 0%, #1b1733 0%, #0e0c1a 55%, #07060d 100%);
+}
+
+.interviewer-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 16px 16px;
+  opacity: .5;
+  pointer-events: none;
+}
+
+.interviewer-tile {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 1;
+}
+
+.interviewer-mark {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .25s, border-color .25s;
+}
+
+.interviewer-mark svg {
+  width: 17px;
+  height: 17px;
+  color: #c2b8f2;
+  transition: color .25s;
+}
+
+.interviewer-mark::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid rgba(124,108,240,.22);
+}
+
+.interviewer-tile.speaking .interviewer-mark {
+  background: rgba(124,108,240,.14);
+  border-color: rgba(124,108,240,.4);
+}
+
+.interviewer-tile.speaking .interviewer-mark svg {
+  color: #e4defb;
+}
+
+.interviewer-tile.speaking .interviewer-mark::after {
+  animation: ringPulse 1.5s ease-out infinite;
+  border-color: rgba(124,108,240,.55);
+}
+
+.interviewer-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5px;
+  height: 22px;
+}
+
+.interviewer-wave span {
+  width: 3px;
+  border-radius: 2px;
+  height: 4px;
+  display: block;
+  background: rgba(178,168,232,.4);
+  transition: background .25s;
+}
+
+.interviewer-tile.speaking .interviewer-wave span {
+  background: linear-gradient(180deg, #c7bff2, #7c6cf0);
+  animation: waveTall 1s ease-in-out infinite;
+}
+
+.interviewer-tile.speaking .interviewer-wave span:nth-child(1),
+.interviewer-tile.speaking .interviewer-wave span:nth-child(9) { animation-delay: 0s; animation-duration: .75s; }
+.interviewer-tile.speaking .interviewer-wave span:nth-child(2),
+.interviewer-tile.speaking .interviewer-wave span:nth-child(8) { animation-delay: .08s; animation-duration: .9s; }
+.interviewer-tile.speaking .interviewer-wave span:nth-child(3),
+.interviewer-tile.speaking .interviewer-wave span:nth-child(7) { animation-delay: .16s; animation-duration: .8s; }
+.interviewer-tile.speaking .interviewer-wave span:nth-child(4),
+.interviewer-tile.speaking .interviewer-wave span:nth-child(6) { animation-delay: .24s; animation-duration: 1s; }
+.interviewer-tile.speaking .interviewer-wave span:nth-child(5) { animation-delay: .32s; animation-duration: .85s; }
+
+@keyframes waveTall { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(3.2); } }
+@keyframes ringPulse { 0% { box-shadow: 0 0 0 0 rgba(124,108,240,.45); } 70% { box-shadow: 0 0 0 13px rgba(124,108,240,0); } 100% { box-shadow: 0 0 0 0 rgba(124,108,240,0); } }
+
+.interviewer-chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(6,5,12,.66);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 20px;
+  padding: 4px 10px 4px 8px;
+  font-size: 10.5px;
+  color: #dcd8f5;
+  font-weight: 500;
+  letter-spacing: .01em;
+  z-index: 2;
+}
+
+.interviewer-nameplate { left: 12px; bottom: 12px; }
+.candidate-chip { left: 12px; bottom: 12px; }
+.interviewer-live-badge { left: 12px; top: 10px; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #e39aa5; }
+.interviewer-live-badge i { width: 6px; height: 6px; border-radius: 50%; background: var(--danger); box-shadow: 0 0 0 3px rgba(255,92,114,.16); display: inline-block; }
+
+.interviewer-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.interviewer-bubble-wrap {
+  position: relative;
+  padding: 11px 14px 12px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  transition: border-color .2s;
+  min-height: 60px;
+}
+
+.interviewer-bubble-wrap::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  transform: translateX(-50%) rotate(45deg);
+  transition: border-color .2s;
+}
+
+.interviewer-bubble-wrap.speaking {
+  border-top-color: rgba(124,108,240,.5);
+}
+
+.interviewer-bubble-wrap.speaking::before {
+  border-color: rgba(124,108,240,.5);
+}
+
+.bubble-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.vidi-question-text {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.interviewer-bubble-wrap.speaking .vidi-question-text {
+  color: var(--text);
+}
+
+.vidi-cursor {
+  display: inline-block;
+  animation: vidi-blink 1s step-start infinite;
+  color: var(--accent);
+}
+
+@keyframes vidi-blink { 50% { opacity: 0; } }
+/* ---- end ported block ---- */
+
+.vidi-video-box {
+  height: 200px;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.vidi-video-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vidi-cam-placeholder {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.vidi-answer-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  background: var(--surface);
+  margin-bottom: 14px;
+}
+
+.vidi-answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.vidi-listening-label {
+  color: var(--success);
+}
+
+.vidi-q-progress {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.vidi-answer-box {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2, var(--surface));
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px 12px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.vidi-answer-box:disabled {
+  opacity: .6;
+}
+
+.vidi-submit-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vidi-submit-btn {
+  background: linear-gradient(180deg, var(--btn-start), var(--btn-end));
+  border: 1px solid rgba(255,255,255,.06);
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 9px;
+}
+
+.vidi-submit-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.vidi-feedback-box {
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--accent-light);
+}
+
+.vidi-feedback-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.vidi-feedback-head span:first-child {
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.vidi-feedback-score {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.vidi-feedback-text {
+  font-size: 11.5px;
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.vidi-controls-bar {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+}
+
+.vidi-controls-left {
+  display: flex;
+  gap: 8px;
+}
+
+.vidi-start-btn {
+  background: linear-gradient(180deg, var(--btn-start), var(--btn-end));
+  border: 1px solid rgba(255,255,255,.06);
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 9px;
+}
+
+.vidi-end-btn {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 9px;
+  font-weight: 600;
+}
+
+.vidi-error,
+.vidi-error-inline {
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.vidi-error {
+  max-width: 480px;
+  margin: 60px auto;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.vidi-complete {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.vidi-overall-score {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+.vidi-loading-overlay {
+  text-align: center;
+  padding: 40px 0;
+}

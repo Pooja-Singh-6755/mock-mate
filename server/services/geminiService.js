@@ -138,12 +138,6 @@ export function nextDifficulty(currentDifficulty, lastScore) {
   return currentDifficulty;
 }
 
-/**
- * Streaming question generator — powers the live typing effect.
- * FIX: now passes `role` into pickTopic() so the topic pool actually matches
- * the selected role (Frontend / Backend / System design / MERN), instead of
- * always rotating through the same fixed MERN-flavoured list.
- */
 export async function streamGenerateQuestion({ role, difficulty, order, previousQuestions = [], onChunk }) {
   const activeTopic = pickTopic(role, order);
 
@@ -172,3 +166,39 @@ Output ONLY the question text itself — no numbering, no quotes, no markdown, n
 
   return { text: fullText.trim(), topic: activeTopic, difficulty };
 }
+export async function generateMCQQuestion({ role , difficulty , order , previousQuestions = []})  {
+   const activeTopic = pickTopic(role , order)
+
+   const avoidList = previousQuestions.length ? `Do NOT repeat or closely rephrase any of these already-asked questions:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}` : 'This is the first question of the interview.';
+   
+    const prompt = `
+     You are an experienced technical interviewer creating a multiple-choice question.
+     Role: "${role}"
+     Target Focus Topic: "${activeTopic}"
+     Difficulty Level: "${difficulty}"
+
+     Generate ONE multiple-choice question strictly about "${activeTopic}", relevant to the "${role}" role.
+     Provide exactly 4 options. Exactly one must be correct.
+
+     ${avoidList}
+
+     Return ONLY valid JSON, no markdown, no explanation, in this exact shape:
+     {"text": "the question text", "options": ["option A", "option B", "option C", "option D"], "correctIndex": 0, "topic": "${activeTopic}", "difficulty": "${difficulty}"}
+    `.trim();
+
+    const raw = await callGemini(prompt , { temperature: 0.7 , maxOutputTokens: 400});
+
+    const parsed = safeParseJSON(raw);
+
+    if(!parsed.text || !Array.isArray(parsed.options) || parsed.length !== 4 || typeof parsed.correctIndex !== 'number') {
+      throw new Error ('Gemini response missing required MCQ fields.');
+    }
+
+    return {
+      text : parsed.text,
+      options : parsed.options,
+      correctIndex : parsed.correctIndex,
+      topic : activeTopic,
+      difficulty: parsed.difficulty || difficulty
+    } ;
+  }
